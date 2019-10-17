@@ -14,6 +14,7 @@ cities ={
     'https://de.indeed.com':['München','Berlin']}
 
 max_pages=2
+blocked_companies =['sword', 'gfi', 'zenika', 'groupe sii', 'cgi group', 'gfi informatique']
 
 
 with requests.Session() as s:
@@ -38,7 +39,7 @@ with requests.Session() as s:
 
 
 df = pd.DataFrame(results, columns = ['title','company','location','href'])
-
+df = df[~df['company'].isin([x.lower() for x in blocked_companies])]
 
 # add href to the job advert
 df['joburl'] = '<a href="' + df['href']+ '">' + df['title'] + '</a>'
