@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup as bs
 import pandas as pd
 import time
+from functools import reduce
 from collections import defaultdict
 
 results = []
@@ -13,9 +14,9 @@ cities ={
     'http://indeed.fr':['Rennes,+France','Lyon,+France'],
     'https://de.indeed.com':['München','Berlin']}
 
-max_pages=2
+max_pages=1
 blocked_companies =['sword', 'gfi', 'zenika', 'groupe sii', 'cgi group', 'gfi informatique']
-
+blocked_titles=['Administrateur','trainee','junior']
 
 with requests.Session() as s:
 
@@ -38,8 +39,15 @@ with requests.Session() as s:
                 results = results + list_of_tuples
 
 
+#build dataframe
 df = pd.DataFrame(results, columns = ['title','company','location','href'])
-df = df[~df['company'].isin([x.lower() for x in blocked_companies])]
+
+# remove blocked companies
+df = df[~df['company'].str.lower().isin([x.lower() for x in blocked_companies])]
+
+# remove blocked titles
+df = df [~df.title.apply(lambda sentence: any(word.lower() in sentence.lower() for word in blocked_titles))]
+
 
 # add href to the job advert
 df['joburl'] = '<a href="' + df['href']+ '">' + df['title'] + '</a>'
@@ -63,6 +71,5 @@ html_string = '''
 with open('test.html', 'w') as f:
     f.write(html_string.format(table=df.to_html(escape=False, classes='mystyle')))
 
-#df.to_html("test.html",escape=False)
 
 
