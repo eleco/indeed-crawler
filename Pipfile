@@ -11,6 +11,7 @@ pandas = "*"
 requests = "*"
 lxml = "*"
 jinja2 = "*"
+sendgrid = "*"
 
 [requires]
 python_version = "3.7"

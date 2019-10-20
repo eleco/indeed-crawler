@@ -4,6 +4,17 @@ import pandas as pd
 import time
 from functools import reduce
 from collections import defaultdict
+import os
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+from datetime import date
+
+
+# sendgrid settings
+sendgrid_key = os.environ.get('SENDGRID_KEY')
+to_email = os.environ.get('SENDGRID_RECIPIENT')
+sg = SendGridAPIClient(sendgrid_key)
+
 
 results = []
 url_suffix='&sort=date&fromage=1&start={}'
@@ -11,12 +22,14 @@ url_suffix='&sort=date&fromage=1&start={}'
 
 #search criteria
 cities ={
-    'http://indeed.fr':['Rennes,+France','Lyon,+France'],
-    'https://de.indeed.com':['München','Berlin']}
+    'http://indeed.fr':['Rennes,+France','Lyon,+France', 'Bordeaux,+France', 'Pau,+France', 'Toulouse,+France', 'Marseille,+France'],
+    'http://indeed.es':['Barcelona','Valencia','Madrid'],
+    'https://de.indeed.com':['München','Berlin'],
+    'http://indeed.co.uk':['London']}
 
-max_pages=1
+max_pages=2
 blocked_companies =['sword', 'gfi', 'zenika', 'groupe sii', 'cgi group', 'gfi informatique']
-blocked_titles=['Administrateur','trainee','junior']
+blocked_titles=['Administrateur','trainee','junior','test','stage','cobol','php','ios','enseignant','marketing','seo']
 
 with requests.Session() as s:
 
@@ -67,9 +80,12 @@ html_string = '''
 </html>.
 '''
 
-# OUTPUT AN HTML FILE
-with open('test.html', 'w') as f:
+# OUTPUT AN HTML FILE AND SEND AS EMAIL
+with open('jobs.html', 'w+') as f:
     f.write(html_string.format(table=df.to_html(escape=False, classes='mystyle')))
-
-
+    f.seek(0)
+    sg.send(Mail(from_email='indeed-crawler@noreply',
+                subject="jobs crawled at: "+ str(date.today()), 
+                to_emails=to_email,
+                html_content=f.read()))
 
