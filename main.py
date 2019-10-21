@@ -9,7 +9,6 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from datetime import date
 
-
 # sendgrid settings
 sendgrid_key = os.environ.get('SENDGRID_KEY')
 to_email = os.environ.get('SENDGRID_RECIPIENT')
@@ -25,10 +24,11 @@ cities ={
     'http://indeed.fr':['Rennes,+France','Lyon,+France', 'Bordeaux,+France', 'Pau,+France', 'Toulouse,+France', 'Marseille,+France'],
     'http://indeed.es':['Barcelona','Valencia','Madrid'],
     'https://de.indeed.com':['München','Berlin'],
-    'http://indeed.co.uk':['London']}
+    'http://indeed.co.uk':['London'],
+    'https://www.indeed.nl':['Amsterdam']}
 
 max_pages=2
-blocked_companies =['sword', 'gfi', 'zenika', 'groupe sii', 'cgi group', 'gfi informatique']
+blocked_companies =['sword', 'gfi', 'zenika', 'groupe sii', 'cgi group', 'gfi informatique','netcentric','utigroup','onepoint']
 blocked_titles=['Administrateur','trainee','junior','test','stage','cobol','php','ios','enseignant','marketing','seo']
 
 with requests.Session() as s:
@@ -70,19 +70,22 @@ print(df)
 # generate output
 pd.set_option('colheader_justify', 'center')   # FOR TABLE <th>
 
+with open('df_style.css','r') as css_f:
+    css = css_f.read()
+
+table = df.to_html(escape=False, classes='mystyle')
 html_string = '''
 <html>
-  <head><title>HTML Pandas Dataframe with CSS</title></head>
-  <link rel="stylesheet" type="text/css" href="df_style.css"/>
-  <body>
-    {table}
-  </body>
+  <head><title>Indeed Crawler</title>
+  <style>''' + css + '''</style></head>
+  <body>'''  + table + '''  
+ </body>
 </html>.
 '''
 
 # OUTPUT AN HTML FILE AND SEND AS EMAIL
 with open('jobs.html', 'w+') as f:
-    f.write(html_string.format(table=df.to_html(escape=False, classes='mystyle')))
+    f.write(html_string)
     f.seek(0)
     sg.send(Mail(from_email='indeed-crawler@noreply',
                 subject="jobs crawled at: "+ str(date.today()), 
