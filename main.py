@@ -19,15 +19,23 @@ results = []
 url_suffix='&sort=date&fromage=1&start={}'
 
 
-#search criteria
+#serach criteria for cities 
 cities ={
     'http://indeed.fr':['Rennes,+France','Lyon,+France', 'Bordeaux,+France', 'Pau,+France', 'Toulouse,+France', 'Marseille,+France'],
     'http://indeed.es':['Barcelona','Valencia','Madrid'],
     'https://de.indeed.com':['München','Berlin'],
     'http://indeed.co.uk':['London'],
-    'https://www.indeed.nl':['Amsterdam']}
+    'https://www.indeed.nl':['Amsterdam'],
+    'http://indeed.com.sg':['Singapore'],
+    'https://www.indeed.pt':['Lisboa']}
 
+# max paging per city
 max_pages=2
+
+#skill sought for
+skill = 'java'
+
+#blocked companies and titles removed from the results
 blocked_companies =['sword', 'gfi', 'zenika', 'groupe sii', 'cgi group', 'gfi informatique','netcentric','utigroup','onepoint']
 blocked_titles=['Administrateur','trainee','junior','test','stage','cobol','php','ios','enseignant','marketing','seo']
 
@@ -39,7 +47,7 @@ with requests.Session() as s:
         
             for page in range(max_pages):
                 time.sleep(1)
-                url= host + '/jobs?q=java' + '&l=' + city + url_suffix
+                url= host + '/jobs?q=' + skill + '&l=' + city + url_suffix
                 res = s.get(url.format(page))
                 soup = bs(res.content, 'lxml')
                 urls = [item for item in soup.select('.title > a')]
