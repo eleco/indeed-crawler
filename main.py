@@ -20,14 +20,25 @@ url_suffix='&sort=date&fromage=1&start={}'
 
 
 #serach criteria for cities 
+#cities ={
+#    'http://indeed.fr':['Rennes,+France','Lyon,+France', 'Bordeaux,+France', 'Pau,+France', 'Toulouse,+France', 'Marseille,+France'],
+#    'http://indeed.es':['Barcelona','Valencia','Madrid'],
+#    'https://de.indeed.com':['München','Berlin'],
+#    'http://indeed.co.uk':['London'],
+#    'https://www.indeed.nl':['Amsterdam'],
+#    'http://indeed.com.sg':['Singapore'],
+#    'https://www.indeed.pt':['Lisboa']}
+
 cities ={
-    'http://indeed.fr':['Rennes,+France','Lyon,+France', 'Bordeaux,+France', 'Pau,+France', 'Toulouse,+France', 'Marseille,+France'],
-    'http://indeed.es':['Barcelona','Valencia','Madrid'],
-    'https://de.indeed.com':['München','Berlin'],
-    'http://indeed.co.uk':['London'],
-    'https://www.indeed.nl':['Amsterdam'],
-    'http://indeed.com.sg':['Singapore'],
-    'https://www.indeed.pt':['Lisboa']}
+    'http://indeed.fr':['Remote'],
+    'http://indeed.es':['Remote'],
+    'https://de.indeed.com':['Remote'],
+    'http://indeed.co.uk':['Remote'],
+    'https://www.indeed.nl':['Remote'],
+    'http://indeed.com.sg':['Remote'],
+    'https://www.indeed.pt':['Remote']}
+
+
 
 # max paging per city
 max_pages=2
