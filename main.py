@@ -5,6 +5,7 @@ import time
 from functools import reduce
 from collections import defaultdict
 import os
+import sys
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from datetime import date
@@ -55,6 +56,7 @@ with requests.Session() as s:
     for host in cities:
     
         for city in cities[host]:
+            print("fetching jobs for: " + host +  " in:" + city)
         
             for page in range(max_pages):
                 time.sleep(1)
@@ -80,6 +82,8 @@ df = df[~df['company'].str.lower().isin([x.lower() for x in blocked_companies])]
 # remove blocked titles
 df = df [~df.title.apply(lambda sentence: any(word.lower() in sentence.lower() for word in blocked_titles))]
 
+if len(df)==0 or  not (href in df):
+    sys.exit()
 
 # add href to the job advert
 df['joburl'] = '<a href="' + df['href']+ '">' + df['title'] + '</a>'
