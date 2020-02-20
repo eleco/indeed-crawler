@@ -82,7 +82,7 @@ df = df[~df['company'].str.lower().isin([x.lower() for x in blocked_companies])]
 # remove blocked titles
 df = df [~df.title.apply(lambda sentence: any(word.lower() in sentence.lower() for word in blocked_titles))]
 
-if len(df)==0 or  not (href in df):
+if len(df)==0:
     sys.exit()
 
 # add href to the job advert
