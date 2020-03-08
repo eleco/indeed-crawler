@@ -31,7 +31,7 @@ url_suffix='&sort=date&fromage=1&start={}'
 #    'https://www.indeed.pt':['Lisboa']}
 
 cities ={
-    'http://indeed.fr':['Remote','Bordeaux','Marseille','Toulouse'],
+    'http://indeed.fr':['Remote','Bordeaux','Marseille','Toulouse','Lyon'],
     'http://indeed.es':['Remote'],
     'https://de.indeed.com':['Remote'],
     'http://indeed.co.uk':['Remote','Cambridge'],
